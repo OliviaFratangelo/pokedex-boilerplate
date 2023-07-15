@@ -3,6 +3,7 @@ const app = express();
 const morgan = require("morgan");
 app.use(morgan("dev"));
 const pokeBank = require("./pokeBank");
+app.use(express.static('public'))
 
 app.get("/",(req,rest) => {
   const pokemonList = pokeBank.list();
@@ -15,7 +16,8 @@ app.get("/",(req,rest) => {
 
 app.get("/pokemon/:id",(req,res) => {
   const pokemon = pokeBank.find(req.params.id);
-  const post = pokeBank.find(id);
+  const post = pokeBank.find(req.params.id);
+
   if(!pokemon) {
     res.status(404).send("Pokemon not found"); }
     else {
@@ -27,12 +29,12 @@ app.get("/pokemon/:id",(req,res) => {
         </head>
         <body>
           <div class="pokemon-list">
-            <header><img src="/logo.png" />Pokedex</header>
+            <header><img src="public/logo.png" />Pokedex</header>
             ${pokemon
               .map(
                 (pokemon) => `
             <div class="pokemon-item">
-              <img class="pokemon-img" src={pokemon.image} />
+              <img class="pokemon-img" src=${pokemon.image} />
               <p>
                 <span class="pokemon-position">${pokemon.id}. ▲</span>${pokemon.name}
                 <small>(Trained by ${pokemon.trainer})</small>
