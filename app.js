@@ -19,6 +19,26 @@ app.get("/", (req, res) => {
 app.get("/pokemon/:id", (req, res) => {
   const id = req.params.id;
   const post = pokeBank.find(id);
+  if (!pokeBank.find(id)) {
+    res.status(404);
+    const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>My Pokedex</title>
+      <link rel="stylesheet" href="/style.css" />
+    </head>
+    <body>
+      <header><img src="/logo.png"/>Pokedex</header>
+      <div class="not-found">
+        <p>Pika pika... Page Not Found</p>
+        <img src="/pikachu-404.gif" />
+      </div>
+    </body>
+    </html>`;
+    res.send(html);
+  }
+  else {
   res.send(`<!DOCTYPE html>
   <html>
     <head>
@@ -45,10 +65,10 @@ app.get("/pokemon/:id", (req, res) => {
     </body>
   </html> );
   `)
-  });
-        
+  }});
 
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`server is listening on port ${PORT}`);
 });
+
